@@ -34,7 +34,7 @@ public class MailClient extends Frame {
      */
     public MailClient() {
         super("Java Mailclient");
-	
+
 	/* Create panels for holding the fields. To make it look nice,
 	   create an extra panel for holding all the child panels. */
         Panel serverPanel = new Panel(new BorderLayout());
@@ -76,7 +76,7 @@ public class MailClient extends Frame {
         show();
     }
 
-    static public void main(String argv[]) {
+    static public void main(String[] argv) {
         new MailClient();
     }
 
@@ -115,14 +115,10 @@ public class MailClient extends Frame {
 
 	    /* Create the envelope, open the connection and try to send
 	       the message. */
+
             try {
                 Envelope envelope = new Envelope(mailMessage,
                         serverField.getText());
-            } catch (UnknownHostException e) {
-                /* If there is an error, do not go further */
-                return;
-            }
-            try {
                 SMTPConnection connection = new SMTPConnection(envelope);
                 connection.send(envelope);
                 connection.close();
