@@ -1,9 +1,8 @@
-package com.company;
-
 import java.io.*;
-import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Base64;
+
 
 /* $Id: MailClient.java,v 1.7 1999/07/22 12:07:30 kangasha Exp $ */
 
@@ -14,9 +13,12 @@ import java.awt.event.*;
  */
 public class MailClient extends Frame {
     /* The stuff for the GUI. */
+    private String imageName;
+    private String image;
     private Button btSend = new Button("Send");
     private Button btClear = new Button("Clear");
     private Button btQuit = new Button("Quit");
+    private Button btPic = new Button("Picture");
     private Label serverLabel = new Label("Local mailserver:");
     private TextField serverField = new TextField("", 40);
     private Label fromLabel = new Label("From:");
@@ -64,9 +66,11 @@ public class MailClient extends Frame {
         btSend.addActionListener(new SendListener());
         btClear.addActionListener(new ClearListener());
         btQuit.addActionListener(new QuitListener());
+        btPic.addActionListener(new PicListener());
         buttonPanel.add(btSend);
         buttonPanel.add(btClear);
         buttonPanel.add(btQuit);
+        buttonPanel.add(btPic);
 
         /* Add, pack, and show. */
         add(fieldPanel, BorderLayout.NORTH);
@@ -76,7 +80,7 @@ public class MailClient extends Frame {
         show();
     }
 
-    static public void main(String[] argv) {
+    static public void main(String argv[]) {
         new MailClient();
     }
 
@@ -105,7 +109,9 @@ public class MailClient extends Frame {
             Message mailMessage = new Message(fromField.getText(),
                     toField.getText(),
                     subjectField.getText(),
-                    messageText.getText());
+                    messageText.getText(),
+                    imageName,
+                    image);
 
 	    /* Check that the message is valid, i.e., sender and
 	       recipient addresses look ok. */
@@ -115,9 +121,10 @@ public class MailClient extends Frame {
 
 	    /* Create the envelope, open the connection and try to send
 	       the message. */
+	        Envelope envelope;
 
             try {
-                Envelope envelope = new Envelope(mailMessage,
+                envelope = new Envelope(mailMessage,
                         serverField.getText());
                 SMTPConnection connection = new SMTPConnection(envelope);
                 connection.send(envelope);
@@ -145,6 +152,35 @@ public class MailClient extends Frame {
     class QuitListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
+        }
+    }
+
+    /* Picture */
+    class PicListener implements ActionListener {
+        //This listener has been added because we needed to add a button to attached files
+        public void actionPerformed(ActionEvent e) {
+            FileDialog show = new FileDialog((Frame)null,"Please select your chosen file.");
+            show.setMode(FileDialog.LOAD);
+            show.setVisible(true);
+            imageName = show.getFile();
+            /*The file path needs to be changed if the program is to be used by others than me,
+            due to the filepath being on my computer.
+             */
+            System.out.println(imageName);
+            File file = new File("/zhome/77/7/118273/Downloads/" + imageName);
+            // /zhome/77/7/118273/Downloads/ /zhome/b9/d/118673/Downloads/
+
+            try {
+                FileInputStream reader = new FileInputStream(file);
+                byte[] bytes = new byte[(int)file.length()];
+                reader.read(bytes);
+                //We encode our picture to Base64, because that's how pictures are encoded.
+                image = Base64.getEncoder().encodeToString(bytes);
+
+            } catch(Exception E1) { //added an exception in case file couldn't be located.
+                System.out.println("Couldn't locate the requested file");
+            }
+
         }
     }
 }

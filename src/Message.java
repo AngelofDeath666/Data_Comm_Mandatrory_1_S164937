@@ -1,5 +1,3 @@
-package com.company;
-
 import java.util.*;
 import java.text.*;
 
@@ -25,21 +23,34 @@ public class Message {
 
     /* Create the message object by inserting the required headers from
        RFC 822 (From, To, Date). */
-    public Message(String from, String to, String subject, String text) {
+    public Message(String from, String to, String subject, String text, String imageName, String image) {
         /* Remove whitespace */
         From = from.trim();
         To = to.trim();
         Headers = "From: " + From + CRLF;
         Headers += "To: " + To + CRLF;
         Headers += "Subject: " + subject.trim() + CRLF;
+        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss 'GMT'");
+        String date = format.format(new Date());
+        Headers += "Date: " + date;
+        //MIME stands for "Multipurpose Internet Mail Extensions
+        Headers += "MIME-version: 1.0" +CRLF;
+        Headers += "Content-Type: multipart/mixed; boundary=seperator" + CRLF;
+        Headers += CRLF+"--seperator" + CRLF+CRLF;
 
-	/* A close approximation of the required format. Unfortunately
-	   only GMT. */
-        SimpleDateFormat format =
-                new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
-        String dateString = format.format(new Date());
-        Headers += "Date: " + dateString + CRLF;
-        Body = text;
+        /*A close approximation of the required format, though only GMT - unfortunately
+        */
+        Body = text + CRLF;
+        Body += "--seperator" + CRLF;
+        Body += "Content-Type: application/octet-stream; name="+imageName + CRLF;
+        Body += "Content-Disposition: attachment; filename="+imageName + CRLF;
+        Body += "Content-Transfer-Encoding: based64" + CRLF;
+        Body += "--seperator" + CRLF;
+        //you need to add a separator and CRLF before and after the image to incapsulate the message
+        Body += image + CRLF+CRLF;
+        Body += "--seperator--" + CRLF;
+        Body += "."; //this '.' ends the message
+
     }
 
     /* Two functions to access the sender and recipient. */
