@@ -27,7 +27,7 @@ public class Message {
         /* Remove whitespace */
         From = from.trim();
         To = to.trim();
-        Headers = "From: " + From + CRLF;
+        Headers = "From: " + From + CRLF; //todo need to me +=?
         Headers += "To: " + To + CRLF;
         Headers += "Subject: " + subject.trim() + CRLF;
         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss 'GMT'");
@@ -40,7 +40,7 @@ public class Message {
 
         /*A close approximation of the required format, though only GMT - unfortunately
         */
-        Body = text + CRLF;
+        Body = text + CRLF; //todo need to be +=?
         Body += "--seperator" + CRLF;
         Body += "Content-Type: application/octet-stream; name="+imageName + CRLF;
         Body += "Content-Disposition: attachment; filename="+imageName + CRLF;

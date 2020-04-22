@@ -48,7 +48,7 @@ public class SMTPConnection {
         String localhost = (InetAddress.getLocalHost().getHostName());
         //we use EHLO here, because we use the ESMTP (extended SMTP)
         sendCommand("EHLO " + localhost, 250);
-        System.out.println("We reach ehlo");
+        System.out.println("We reach ehlo"); //todo stupid way to do it?
         /*the reason we have 9 readline here, is because when we use EHLO it sends back
         a number of functions, that we bypass by readLine 9 times.
          */
