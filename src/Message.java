@@ -32,24 +32,22 @@ public class Message {
         Headers += "Subject: " + subject.trim() + CRLF;
         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss 'GMT'");
         String date = format.format(new Date());
-        Headers += "Date: " + date;
+        Headers += "Date: " + date + CRLF;
         //MIME stands for "Multipurpose Internet Mail Extensions
         Headers += "MIME-version: 1.0" +CRLF;
-        Headers += "Content-Type: multipart/mixed; boundary=seperator" + CRLF;
-        Headers += CRLF+"--seperator" + CRLF+CRLF;
+        Headers += "Content-Type: multipart/mixed; boundary=separator" + CRLF;
+        Headers += "--separator" + CRLF;
 
         /*A close approximation of the required format, though only GMT - unfortunately
          */
         Body = text + CRLF;
-        Body += "--seperator" + CRLF;
+        Body += "--separator" + CRLF;
         Body += "Content-Type: application/octet-stream; name="+imageName + CRLF;
         Body += "Content-Disposition: attachment; filename="+imageName + CRLF;
-        Body += "Content-Transfer-Encoding: based64" + CRLF;
-        Body += "--seperator" + CRLF;
-        //you need to add a separator and CRLF before and after the image to incapsulate the message
-        Body += image + CRLF+CRLF;
-        Body += "--seperator--" + CRLF;
-        Body += "."; //this '.' ends the message
+        Body += "Content-Transfer-Encoding: based64" + CRLF + CRLF;
+        Body += image + CRLF + CRLF;
+        Body += "--separator--" + CRLF;
+//        Body += CRLF + "."; //this '.' ends the message
 
     }
 
