@@ -27,7 +27,7 @@ public class Message {
         /* Remove whitespace */
         From = from.trim();
         To = to.trim();
-        Headers = "From: " + From + CRLF; //todo need to me +=?
+        Headers = "From: " + From + CRLF;
         Headers += "To: " + To + CRLF;
         Headers += "Subject: " + subject.trim() + CRLF;
         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss 'GMT'");
@@ -35,20 +35,20 @@ public class Message {
         Headers += "Date: " + date;
         //MIME stands for "Multipurpose Internet Mail Extensions
         Headers += "MIME-version: 1.0" +CRLF;
-        Headers += "Content-Type: multipart/mixed; boundary=separator" + CRLF;
-        Headers += CRLF+"--separator" + CRLF+CRLF;
+        Headers += "Content-Type: multipart/mixed; boundary=seperator" + CRLF;
+        Headers += CRLF+"--seperator" + CRLF+CRLF;
 
         /*A close approximation of the required format, though only GMT - unfortunately
-        */
-        Body = text + CRLF; //todo need to be +=?
-        Body += "--separator" + CRLF;
+         */
+        Body = text + CRLF;
+        Body += "--seperator" + CRLF;
         Body += "Content-Type: application/octet-stream; name="+imageName + CRLF;
         Body += "Content-Disposition: attachment; filename="+imageName + CRLF;
         Body += "Content-Transfer-Encoding: based64" + CRLF;
-        Body += "--separator" + CRLF;
+        Body += "--seperator" + CRLF;
         //you need to add a separator and CRLF before and after the image to incapsulate the message
         Body += image + CRLF+CRLF;
-        Body += "--separator--" + CRLF;
+        Body += "--seperator--" + CRLF;
         Body += "."; //this '.' ends the message
 
     }

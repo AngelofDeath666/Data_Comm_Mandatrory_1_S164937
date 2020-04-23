@@ -27,7 +27,7 @@ public class SMTPConnection {
     public SMTPConnection(Envelope envelope) throws IOException {
         System.out.println(isConnected);
         //creates the socket and connect to server.
-        connection = new Socket(envelope.DestAddr, SMTP_PORT);
+        connection = new Socket((envelope.DestAddr), SMTP_PORT);
         System.out.println("Connetion socket");
         //Creates the input stream
         fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -55,7 +55,7 @@ public class SMTPConnection {
 
         //we use EHLO here, because we use the ESMTP (extended SMTP)
 //      sendCommand("EHLO " + localhost, 250);
-        sendCommand("EHLO "+localhost, 250);
+        sendCommand("EHLO " + localhost, 250);
         System.out.println("We reach ehlo");
         System.out.println(toServer);
         /*the reason we have 9 readline here, is because when we use EHLO it sends back
@@ -71,18 +71,18 @@ public class SMTPConnection {
         fromServer.readLine();
         fromServer.readLine();
 
-
         isConnected = true;
+
     }
 
     /* Send the message. Write the correct SMTP-commands in the
        correct order. No checking for errors, just throw them to the
        caller. */
     public void send(Envelope envelope) throws IOException {
-        sendCommand("MAIL FROM: <" + envelope.Sender+ ">",250); //Here we input the sender
-        sendCommand("RCPT TO: <" + envelope.Recipient+ ">",250); //Here we input the recipent
+        sendCommand("MAIL FROM: " + envelope.Sender,250); //Here we input the sender
+        sendCommand("RCPT TO: " + envelope.Recipient,250); //Here we input the recipent
         sendCommand("DATA", 354); //After DATA we write the rest of the message.
-        sendCommand(envelope.Message.toString() + CRLF,250);
+        sendCommand(envelope.Message.toString() + CRLF + ".",250);
     }
 
     /* Close the connection. First, terminate on SMTP level, then
