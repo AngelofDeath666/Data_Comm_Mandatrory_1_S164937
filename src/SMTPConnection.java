@@ -12,9 +12,10 @@ public class SMTPConnection {
     private Socket connection;
 
     /* Streams for reading and writing the socket */
-    private BufferedReader fromServer;
-    private DataOutputStream toServer;
+    private BufferedReader fromServer = null;
+    private DataOutputStream toServer = null;
 
+    //port 25 is standard port for sending mails
     private static final int SMTP_PORT = 25;
     private static final String CRLF = "\r\n";
 
@@ -25,11 +26,15 @@ public class SMTPConnection {
        associated streams. Initialize SMTP connection. */
     public SMTPConnection(Envelope envelope) throws IOException {
         System.out.println(isConnected);
+        //creates the socket and connect to server.
         connection = new Socket(envelope.DestAddr, SMTP_PORT);
         System.out.println("Connetion socket");
+        //Creates the input stream
         fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         System.out.println("Getting from server");
+        //creates the output stream
         toServer = new DataOutputStream(connection.getOutputStream());
+        System.out.println(toServer);
         System.out.println("Sending to server");
 
         /* TODO: Fill in */
@@ -38,6 +43,7 @@ public class SMTPConnection {
         /* TODO: Fill in */
         //Read greeting from server.
         String response = fromServer.readLine();
+        System.out.println(response);
         if (parseReply(response) != 220){
             throw new IOException("No connection achieved");
         }
@@ -46,9 +52,12 @@ public class SMTPConnection {
 	/* SMTP handshake. We need the name of the local machine.
 	   Send the appropriate SMTP handshake command. */
         String localhost = (InetAddress.getLocalHost().getHostName());
+
         //we use EHLO here, because we use the ESMTP (extended SMTP)
-        sendCommand("EHLO " + localhost, 250);
-        System.out.println("We reach ehlo"); //todo stupid way to do it?
+//      sendCommand("EHLO " + localhost, 250);
+        sendCommand("EHLO "+localhost, 250);
+        System.out.println("We reach ehlo");
+        System.out.println(toServer);
         /*the reason we have 9 readline here, is because when we use EHLO it sends back
         a number of functions, that we bypass by readLine 9 times.
          */
@@ -73,7 +82,7 @@ public class SMTPConnection {
         sendCommand("MAIL FROM: <" + envelope.Sender+ ">",250); //Here we input the sender
         sendCommand("RCPT TO: <" + envelope.Recipient+ ">",250); //Here we input the recipent
         sendCommand("DATA", 354); //After DATA we write the rest of the message.
-        sendCommand(envelope.Message.toString(),250);
+        sendCommand(envelope.Message.toString() + CRLF,250);
     }
 
     /* Close the connection. First, terminate on SMTP level, then

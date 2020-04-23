@@ -71,6 +71,7 @@ public class Envelope {
         res += "MX-host: " + DestHost + ", address: " + DestAddr + '\n';
         res += "Message:" + '\n';
         res += Message.toString();
+        System.out.println(Message);
 
         return res;
     }

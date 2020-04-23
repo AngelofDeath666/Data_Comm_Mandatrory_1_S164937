@@ -35,20 +35,20 @@ public class Message {
         Headers += "Date: " + date;
         //MIME stands for "Multipurpose Internet Mail Extensions
         Headers += "MIME-version: 1.0" +CRLF;
-        Headers += "Content-Type: multipart/mixed; boundary=seperator" + CRLF;
-        Headers += CRLF+"--seperator" + CRLF+CRLF;
+        Headers += "Content-Type: multipart/mixed; boundary=separator" + CRLF;
+        Headers += CRLF+"--separator" + CRLF+CRLF;
 
         /*A close approximation of the required format, though only GMT - unfortunately
         */
         Body = text + CRLF; //todo need to be +=?
-        Body += "--seperator" + CRLF;
+        Body += "--separator" + CRLF;
         Body += "Content-Type: application/octet-stream; name="+imageName + CRLF;
         Body += "Content-Disposition: attachment; filename="+imageName + CRLF;
         Body += "Content-Transfer-Encoding: based64" + CRLF;
-        Body += "--seperator" + CRLF;
+        Body += "--separator" + CRLF;
         //you need to add a separator and CRLF before and after the image to incapsulate the message
         Body += image + CRLF+CRLF;
-        Body += "--seperator--" + CRLF;
+        Body += "--separator--" + CRLF;
         Body += "."; //this '.' ends the message
 
     }

@@ -126,6 +126,7 @@ public class MailClient extends Frame {
             try {
                 envelope = new Envelope(mailMessage,
                         serverField.getText());
+                System.out.println(envelope);
                 SMTPConnection connection = new SMTPConnection(envelope);
                 connection.send(envelope);
                 connection.close();
@@ -168,7 +169,7 @@ public class MailClient extends Frame {
              */
             System.out.println(imageName);
             File file = new File("/zhome/77/7/118273/Downloads/" + imageName);
-            // /zhome/77/7/118273/Downloads/ /zhome/b9/d/118673/Downloads/
+            // /zhome/77/7/118273/Downloads/
 
             try {
                 FileInputStream reader = new FileInputStream(file);
